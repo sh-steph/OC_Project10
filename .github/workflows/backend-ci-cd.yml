@@ -35,7 +35,7 @@ jobs:
         run: mvn test
 
       - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@v1
+        uses: SonarSource/sonarcloud-github-action@master
         with:
           organization: "sh-steph-sonar-cloud-key"
           token: ${{ secrets.d19795938559587f28c130c9e56f03475f58ecdd }}
