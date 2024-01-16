@@ -1,0 +1,42 @@
+name: Build and Analyze
+# execute on git push
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    # execute on the following environment
+    runs-on: ubuntu-latest
+    defaults:
+      # run on the "back" folder
+      run:
+        working-directory: "back"
+    strategy:
+      # turn on the following version the technology
+      matrix:
+        java: [11]
+
+    name: Build and Analyze on Java ${{ matrix.java }}
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+
+      - name: Install dependencies
+        run: mvn clean install
+
+      - name: Run Tests
+        run: mvn test
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v1
+        with:
+          organization: "sh-steph-sonar-cloud-key"
+          token: ${{ secrets.d19795938559587f28c130c9e56f03475f58ecdd }}
+          project-key: "sh-steph_OC_Project10"
