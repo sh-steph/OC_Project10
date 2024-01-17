@@ -45,4 +45,3 @@ jobs:
             -Dsonar.projectKey=project10sonarcloud
             -Dsonar.organization="project10sonarcloud"
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.tests=tests/
