@@ -6,7 +6,7 @@ on:
       - 'main'
 
 jobs:
-  build:
+  back_CI:
     # execute on the following environment
     runs-on: ubuntu-latest
     defaults:
@@ -40,6 +40,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GIT_PROJECT10_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         with:
+          projectBaseDir: back
           args:
-            -Dsonar.projectKey="project10sonarcloud"
+            -Dsonar.projectKey=project10sonarcloud
             -Dsonar.organization="project10sonarcloud"
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.tests=tests/
