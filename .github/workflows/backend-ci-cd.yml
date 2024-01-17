@@ -41,5 +41,5 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         with:
           args:
-            -Dsonar.projectKey="sh-steph_OC_Project10"
-            -Dsonar.organization="sh-steph-sonar-cloud-key"
+            -Dsonar.projectKey="sh-steph-sonar-cloud-key"
+            -Dsonar.organization="sh-steph_sonar_cloud"
