@@ -36,7 +36,10 @@ jobs:
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.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 }}
+          SONAR_TOKEN: ${{ secrets.d19795938559587f28c130c9e56f03475f58ecdd }}
         with:
-          organization: "sh-steph-sonar-cloud-key"
-          token: ${{ secrets.d19795938559587f28c130c9e56f03475f58ecdd }}
-          project-key: "sh-steph_OC_Project10"
+          args:
+            -Dsonar.projectKey="sh-steph_OC_Project10"
+            -Dsonar.organization="sh-steph-sonar-cloud-key"
