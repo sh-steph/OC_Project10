@@ -34,6 +34,9 @@ jobs:
       - name: Run Tests
         run: mvn test
 
+      - name: Run Sonar
+        run: mvn verify sonar:sonar -DskipTests=true -Drevision=$REVISION_UNSTABLE $SONAR_OPTS -Dsonar.branch.name=main
+
       - name: Analyze with SonarCloud
         uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
         env:
