@@ -68,13 +68,11 @@
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
 				<version>3.7.0.1746</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>sonar</goal>
-						</goals>
-					</execution>
-				</executions>
+				<configuration>
+					<property>
+						<sonar.scanner.force-deprecated-java-version>true</sonar.scanner.force-deprecated-java-version>
+					</property>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
