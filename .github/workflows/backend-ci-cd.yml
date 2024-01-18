@@ -45,3 +45,4 @@ jobs:
             -Dsonar.projectKey=sh-steph_OC_Project10
             -Dsonar.organization=project10sonarcloud
             -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.analysis.mode=preview
