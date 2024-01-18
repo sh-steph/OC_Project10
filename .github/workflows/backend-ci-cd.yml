@@ -35,7 +35,7 @@ jobs:
         run: mvn test
 
       - name: Analyze with SonarCloud
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: org.sonarsource.scanner.maven:sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_PROJECT10_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
