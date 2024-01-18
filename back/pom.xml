@@ -69,7 +69,7 @@
 				<artifactId>sonar-maven-plugin</artifactId>
 				<version>3.7.0.1746</version>
 				<configuration>
-					<sonar.java.version>11</sonar.java.version>
+					<sonar.java.version>11.0.22</sonar.java.version>
 					<properties>
 						<sonar.scanner.force-deprecated-java-version>true</sonar.scanner.force-deprecated-java-version>
 					</properties>
