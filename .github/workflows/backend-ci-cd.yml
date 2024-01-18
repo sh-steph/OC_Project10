@@ -42,6 +42,6 @@ jobs:
         with:
           projectBaseDir: back
           args:
-            -Dsonar.projectKey=project10sonarcloud
+            -Dsonar.projectKey=sh-steph_OC_Project10
             -Dsonar.organization=project10sonarcloud
             -Dsonar.python.coverage.reportPaths=coverage.xml
