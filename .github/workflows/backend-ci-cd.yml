@@ -3,7 +3,9 @@ name: Build and Analyze
 on:
   push:
     branches:
-      - 'main'
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   back_CI:
@@ -16,7 +18,7 @@ jobs:
     strategy:
       # turn on the following version the technology
       matrix:
-        java: [11]
+        java: [17]
 
     name: Build and Analyze on Java ${{ matrix.java }}
 
@@ -24,7 +26,7 @@ jobs:
       - uses: actions/checkout@master
 
       - name: Setup Java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
 
@@ -33,6 +35,20 @@ jobs:
 
       - name: Run Tests
         run: mvn test   
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+          
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
 
       - name: Analyze with SonarCloud
         env:
