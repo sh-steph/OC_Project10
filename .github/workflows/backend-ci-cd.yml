@@ -32,8 +32,7 @@ jobs:
         run: mvn clean install
 
       - name: Run Tests
-        run: mvn test
-
+        run: mvn test   
       - name: Analyze with SonarCloud
         uses: org.sonarsource.scanner.maven:sonar
         env:
