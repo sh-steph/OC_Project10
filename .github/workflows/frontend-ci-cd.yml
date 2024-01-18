@@ -16,7 +16,7 @@ jobs:
         working-directory: "front"
     strategy:
       matrix:
-        node: ['latest']
+        node: ['20.x']
 
     name: Build Angular with Node ${{ matrix.node }}
     steps:
@@ -31,7 +31,7 @@ jobs:
         run: npm install
 
       - name: Run front test
-        run: npm test
+        run: npm test --watch=false --browsers=HeadlessNoSandbox"
       
       - name: Run front project
         run: npm run build
