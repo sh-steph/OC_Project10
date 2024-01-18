@@ -16,8 +16,7 @@ jobs:
     strategy:
       # turn on the following version the technology
       matrix:
-        # 17 and not 11 because Sonarcloud don't support this version
-        java: [17]
+        java: [11]
 
     name: Build and Analyze on Java ${{ matrix.java }}
 
