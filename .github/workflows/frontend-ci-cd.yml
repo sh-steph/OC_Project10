@@ -40,11 +40,14 @@ jobs:
         with:
           fetch-depth: 0 
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN_FRONT }}
+      - name: Analyze with SonarCloud Frontend
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: front
+          args: >
+            -Dsonar.organization=oc-project10-front
+            -Dsonar.projectKey=oc-project10-front
+            -Dsonar.python.coverage.reportPaths=coverage.xml
   
   # docker-ci:
   #   name: Docker CI
