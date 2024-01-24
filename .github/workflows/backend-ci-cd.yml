@@ -1,11 +1,11 @@
 name: Sonarcloud analyze
 # execute on git push
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, synchronize, reopened]
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     types: [opened, synchronize, reopened]
 
 jobs:
   back_CI:

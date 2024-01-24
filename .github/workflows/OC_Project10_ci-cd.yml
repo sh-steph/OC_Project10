@@ -1,0 +1,98 @@
+name: Sonarcloud analyze
+# execute on git push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  back_CI:
+    # execute on the following environment
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "back"
+    strategy:
+      matrix:
+        java: [17]
+
+    name: Build and Analyze the Backend
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+
+      - name: Compile code
+        run: mvn clean compile
+
+      - name: Run Tests
+        run: mvn test
+
+      - name: Run Package
+        run: mvn package -DskipTests
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+          
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Analyze with SonarCloud Backend
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_PROJECT10_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN_BACK }} 
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=sh-steph_OC_Project10 -Dsonar.organization=project10sonarcloudback -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN_BACK -Dsonar.coverage.jacoco.xmlReportPaths=$GITHUB_WORKSPACE/back/target/site/jacoco/jacoco.xml
+  
+  front_ci:
+    # execute on the following environment
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 'front'
+    strategy:
+      matrix:
+        node: ['20.x']
+
+    name: Build and analyze the Frontend
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run front test
+        run: npm test -- --watch=false --browsers=ChromeHeadless
+      
+      - name: Run front project
+        run: npm run build
+      
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: front
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_PROJECT10_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN_FRONT }}
