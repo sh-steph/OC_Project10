@@ -94,8 +94,15 @@ jobs:
         with:
           projectBaseDir: front
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_PROJECT10_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GIT_PROJECT10_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN_FRONT }}
+
+      - name: SonarCloud Quality Gate
+        uses: sonarsource/quality-gate-action@v1
+        with:
+          organization: project10sonarcloudback
+          token: ${{ secrets.SONARCLOUD_TOKEN_FRONT }}
+          projectKey: sh-steph_OC_Project10
   
   # docker-ci:
   #   runs-on: ubuntu-latest
