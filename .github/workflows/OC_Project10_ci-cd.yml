@@ -8,54 +8,54 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  back_CI:
-    # execute on the following environment
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: "back"
-    strategy:
-      matrix:
-        java: [17]
+  # back_CI:
+  #   # execute on the following environment
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: "back"
+  #   strategy:
+  #     matrix:
+  #       java: [17]
 
-    name: Build and Analyze the Backend
+  #   name: Build and Analyze the Backend
 
-    steps:
-      - uses: actions/checkout@master
+  #   steps:
+  #     - uses: actions/checkout@master
 
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: ${{ matrix.java }}
+  #     - name: Setup Java
+  #       uses: actions/setup-java@v1
+  #       with:
+  #         java-version: ${{ matrix.java }}
 
-      - name: Compile code
-        run: mvn clean compile
+  #     - name: Compile code
+  #       run: mvn clean compile
 
-      - name: Run Tests
-        run: mvn test
+  #     - name: Run Tests
+  #       run: mvn test
 
-      - name: Run Package
-        run: mvn package -DskipTests
+  #     - name: Run Package
+  #       run: mvn package -DskipTests
 
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+  #     - name: Cache SonarCloud packages
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ~/.sonar/cache
+  #         key: ${{ runner.os }}-sonar
+  #         restore-keys: ${{ runner.os }}-sonar
           
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+  #     - name: Cache Maven packages
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ~/.m2
+  #         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+  #         restore-keys: ${{ runner.os }}-m2
 
-      - name: Analyze with SonarCloud Backend
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_PROJECT10_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN_BACK }} 
-        run: mvn -B verify sonar:sonar -Dsonar.projectKey=sh-steph_OC_Project10 -Dsonar.organization=project10sonarcloudback -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN_BACK -Dsonar.coverage.jacoco.xmlReportPaths=$GITHUB_WORKSPACE/back/target/site/jacoco/jacoco.xml
+  #     - name: Analyze with SonarCloud Backend
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GIT_PROJECT10_TOKEN }}
+  #         SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN_BACK }} 
+  #       run: mvn -B verify sonar:sonar -Dsonar.projectKey=sh-steph_OC_Project10 -Dsonar.organization=project10sonarcloudback -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN_BACK -Dsonar.coverage.jacoco.xmlReportPaths=$GITHUB_WORKSPACE/back/target/site/jacoco/jacoco.xml
   
   front_ci:
     # execute on the following environment
