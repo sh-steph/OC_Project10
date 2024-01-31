@@ -100,12 +100,12 @@ jobs:
             -Dsonar.organization=oc-project10-front
             -Dsonar.projectKey=oc-project10-front
             -Dsonar.projectName=OC_Project10_front
-            -Dsonar.sources=front/src
-            -Dsonar.tests=front/src
+            -Dsonar.sources=src
+            -Dsonar.tests=src
             -Dsonar.typescript.lcov.reportPaths=/coverage/lcov.info
             -Dsonar.ts.tslintconfigpath=tslint.json
-            -Dsonar.exclusions=front/**/node_modules/**,**/assets/**,**/*.spec.ts
-            -Dsonar.test.inclusions=front/**/*.spec.ts
+            -Dsonar.exclusions=node_modules/**,assets/**,*.spec.ts
+            -Dsonar.test.inclusions=**/*.spec.ts
         
   
   # docker-ci:
