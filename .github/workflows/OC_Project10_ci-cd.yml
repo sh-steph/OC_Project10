@@ -101,6 +101,9 @@ jobs:
             -Dsonar.ts.tslintconfigpath=tslint.json
             -Dsonar.exclusions=front/**/node_modules/**,**/assets/**,**/*.spec.ts
             -Dsonar.test.inclusions=front/**/*.spec.ts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_PROJECT10_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN_FRONT }}
         
   
   # docker-ci:
