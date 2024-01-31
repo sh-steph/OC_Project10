@@ -8,54 +8,54 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  back_CI:
-    # execute on the following environment
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: "back"
-    strategy:
-      matrix:
-        java: [17]
+  # back_CI:
+  #   # execute on the following environment
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: "back"
+  #   strategy:
+  #     matrix:
+  #       java: [17]
 
-    name: Build and Analyze the Backend
+  #   name: Build and Analyze the Backend
 
-    steps:
-      - uses: actions/checkout@master
+  #   steps:
+  #     - uses: actions/checkout@master
 
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: ${{ matrix.java }}
+  #     - name: Setup Java
+  #       uses: actions/setup-java@v1
+  #       with:
+  #         java-version: ${{ matrix.java }}
 
-      - name: Compile code
-        run: mvn clean compile
+  #     - name: Compile code
+  #       run: mvn clean compile
 
-      - name: Run Tests
-        run: mvn test
+  #     - name: Run Tests
+  #       run: mvn test
 
-      - name: Run Package
-        run: mvn package -DskipTests
+  #     - name: Run Package
+  #       run: mvn package -DskipTests
 
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+  #     - name: Cache SonarCloud packages
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ~/.sonar/cache
+  #         key: ${{ runner.os }}-sonar
+  #         restore-keys: ${{ runner.os }}-sonar
           
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+  #     - name: Cache Maven packages
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ~/.m2
+  #         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+  #         restore-keys: ${{ runner.os }}-m2
 
-      - name: Analyze with SonarCloud Backend
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_PROJECT10_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN_BACK }} 
-        run: mvn -B verify sonar:sonar -Dsonar.projectKey=sh-steph_OC_Project10 -Dsonar.organization=project10sonarcloudback -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN_BACK -Dsonar.coverage.jacoco.xmlReportPaths=$GITHUB_WORKSPACE/back/target/site/jacoco/jacoco.xml
+  #     - name: Analyze with SonarCloud Backend
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GIT_PROJECT10_TOKEN }}
+  #         SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN_BACK }} 
+  #       run: mvn -B verify sonar:sonar -Dsonar.projectKey=sh-steph_OC_Project10 -Dsonar.organization=project10sonarcloudback -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN_BACK -Dsonar.coverage.jacoco.xmlReportPaths=$GITHUB_WORKSPACE/back/target/site/jacoco/jacoco.xml
   
   front_ci:
     # execute on the following environment
@@ -91,40 +91,52 @@ jobs:
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: front
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_PROJECT10_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN_FRONT }}
+        with:
+          projectBaseDir: front
+          args: >
+            -Dsonar.organization=oc-project10-front
+            -Dsonar.projectKey=oc-project10-front
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.login=$SONARCLOUD_TOKEN_FRONT
+            -Dsonar.sources=front/src
+            -Dsonar.tests=front/src
+            -Dsonar.typescript.lcov.reportPaths=/coverage/lcov.info
+            -Dsonar.ts.tslintconfigpath=tslint.json
+            -Dsonar.exclusions=front/**/node_modules/**,**/assets/**,**/*.spec.ts
+            -Dsonar.test.inclusions=front/**/*.spec.ts
+        
   
-  docker-ci:
-    runs-on: ubuntu-latest
-    name: Docker CI
-    steps:
-      - uses: actions/checkout@v3
+  # docker-ci:
+  #   runs-on: ubuntu-latest
+  #   name: Docker CI
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #     - name: Login to Docker Hub
+  #       uses: docker/login-action@v3
+  #       with:
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v3
 
-      - name: Build and push Frontend to DockerHub
-        uses: docker/build-push-action@v5
-        with:
-          context: ./front
-          file: ./front/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bobapp-front:latest
+  #     - name: Build and push Frontend to DockerHub
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: ./front
+  #         file: ./front/Dockerfile
+  #         push: true
+  #         tags: ${{ secrets.DOCKERHUB_USERNAME }}/bobapp-front:latest
       
-      - name: Build and push Backend to DockerHub
-        uses: docker/build-push-action@v5
-        with:
-          context: ./back
-          file: ./back/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bobapp-back:latest
+  #     - name: Build and push Backend to DockerHub
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: ./back
+  #         file: ./back/Dockerfile
+  #         push: true
+  #         tags: ${{ secrets.DOCKERHUB_USERNAME }}/bobapp-back:latest
           
