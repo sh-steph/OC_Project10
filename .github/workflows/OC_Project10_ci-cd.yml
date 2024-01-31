@@ -99,8 +99,7 @@ jobs:
           args: >
             -Dsonar.organization=oc-project10-front
             -Dsonar.projectKey=oc-project10-front
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.login=$SONARCLOUD_TOKEN_FRONT
+            -Dsonar.projectName=OC_Project10_front
             -Dsonar.sources=front/src
             -Dsonar.tests=front/src
             -Dsonar.typescript.lcov.reportPaths=/coverage/lcov.info
