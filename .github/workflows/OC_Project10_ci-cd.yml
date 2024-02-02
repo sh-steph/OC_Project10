@@ -93,8 +93,8 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         with:
           args: >
-            -Dsonar.organization=oc-project10-fron
-            -Dsonar.projectKey=oc-project10-fron
+            -Dsonar.organization=oc-project10-front
+            -Dsonar.projectKey=oc-project10-front
             -Dsonar.sources=front/src
             -Dsonar.tests=front/src
             -Dsonar.typescript.lcov.reportPaths=front/coverage/bobapp/lcov-report/lcov.info
